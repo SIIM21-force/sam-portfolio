@@ -48,6 +48,69 @@ html {
     padding: 0 20px;
 }
 
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .portfolio-container {
+        padding: 0 15px;
+    }
+
+    header {
+        flex-direction: column;
+        padding: 20px 0;
+        align-items: flex-start; /* MODIFIED: Was default, now left-aligned */
+    }
+
+    nav ul {
+        flex-direction: row; /* MODIFIED: Was 'column' */
+        padding: 0;
+        margin-top: 10px; /* MODIFIED: Was '20px' */
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-right: 20px; /* MODIFIED: Added for horizontal spacing */
+        margin-bottom: 0; /* MODIFIED: Was '15px' */
+    }
+
+    .home-content {
+        flex-direction: column-reverse;
+        text-align: left; /* MODIFIED: Was 'center' */
+    }
+
+    .intro {
+        max-width: 100%;
+        margin-top: 30px;
+    }
+
+    .intro h1 {
+        font-size: 3.5rem;
+    }
+
+    .profile-pic img {
+        width: 250px;
+        height: 250px;
+    }
+
+    #about h2, #work h2, #contact h2 {
+        font-size: 3rem;
+    }
+
+    .work-items {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .contact-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .contact-info {
+        margin-left: 0;
+        margin-top: 30px;
+    }
+}
+
 /* Header */
 header {
     display: flex;
