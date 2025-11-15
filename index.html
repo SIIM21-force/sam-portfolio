@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="sam-portfolio.css">
 </head>
 <body>
+    <div id="vanta-bg-home" class="vanta-bg"></div>
+    <div id="vanta-bg-about" class="vanta-bg hidden-right"></div>
+    <div id="vanta-bg-work" class="vanta-bg hidden-right"></div>
+    <div id="tsparticles"></div>
     <div class="portfolio-container">
         <header>
             <div class="logo">Samarth M Katageri</div>
@@ -138,5 +142,96 @@
             </div>
         </section>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+    <script>
+        const homeBg = VANTA.FOG({
+            el: "#vanta-bg-home",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            highlightColor: 0xadd8e6,
+            midtoneColor: 0x87ceeb,
+            lowlightColor: 0x4682b4,
+            baseColor: 0xfffde7,
+            blurFactor: 0.6,
+            speed: 1.5,
+            zoom: 0.8
+        });
+
+        const aboutBg = VANTA.FOG({
+            el: "#vanta-bg-about",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            highlightColor: 0xffb6c1,
+            midtoneColor: 0xff69b4,
+            lowlightColor: 0xc71585,
+            baseColor: 0xfffde7,
+            blurFactor: 0.6,
+            speed: 1.5,
+            zoom: 0.8
+        });
+        aboutBg.pause();
+
+        const workBg = VANTA.FOG({
+            el: "#vanta-bg-work",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            highlightColor: 0x98fb98,
+            midtoneColor: 0x3cb371,
+            lowlightColor: 0x2e8b57,
+            baseColor: 0xfffde7,
+            blurFactor: 0.6,
+            speed: 1.5,
+            zoom: 0.8
+        });
+        workBg.pause();
+
+        const sections = document.querySelectorAll('section');
+        const backgroundMap = {
+            'home': { bg: homeBg, el: document.getElementById('vanta-bg-home') },
+            'about': { bg: aboutBg, el: document.getElementById('vanta-bg-about') },
+            'work': { bg: workBg, el: document.getElementById('vanta-bg-work') }
+        };
+
+        let activeSection = 'home';
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const newActiveSection = entry.target.id;
+                    if (newActiveSection !== activeSection) {
+                        const oldBgEl = backgroundMap[activeSection].el;
+                        const newBgEl = backgroundMap[newActiveSection].el;
+
+                        if (oldBgEl && newBgEl) {
+                            oldBgEl.classList.add('hidden-left');
+                            newBgEl.classList.remove('hidden-left', 'hidden-right');
+                        }
+                        
+                        backgroundMap[newActiveSection].bg.play();
+                        if (activeSection && backgroundMap[activeSection] && activeSection !== newActiveSection) {
+                            backgroundMap[activeSection].bg.pause();
+                        }
+
+                        activeSection = newActiveSection;
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
 </body>
 </html>
