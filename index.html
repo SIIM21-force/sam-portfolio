@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Samarth M Katageri - DevOps Engineer</title>
     <link rel="stylesheet" href="sam-portfolio.css">
+    <style>
+        .vanta-bg {
+            transition: opacity 1s ease-in-out;
+        }
+        .vanta-bg.hidden {
+            opacity: 0;
+        }
+    </style>
 </head>
 <body>
     <div id="vanta-bg-home" class="vanta-bg"></div>
     <div id="vanta-bg-about" class="vanta-bg hidden-right"></div>
     <div id="vanta-bg-work" class="vanta-bg hidden-right"></div>
+    <div id="vanta-bg-about" class="vanta-bg hidden"></div>
+    <div id="vanta-bg-work" class="vanta-bg hidden"></div>
     <div id="tsparticles"></div>
     <div class="portfolio-container">
         <header>
@@ -146,81 +156,88 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
     <script>
-        const homeBg = VANTA.FOG({
-            el: "#vanta-bg-home",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            highlightColor: 0xadd8e6,
-            midtoneColor: 0x87ceeb,
-            lowlightColor: 0x4682b4,
-            baseColor: 0xfffde7,
-            blurFactor: 0.6,
-            speed: 1.5,
-            zoom: 0.8
-        });
-
-        const aboutBg = VANTA.FOG({
-            el: "#vanta-bg-about",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            highlightColor: 0xffb6c1,
-            midtoneColor: 0xff69b4,
-            lowlightColor: 0xc71585,
-            baseColor: 0xfffde7,
-            blurFactor: 0.6,
-            speed: 1.5,
-            zoom: 0.8
-        });
-        aboutBg.pause();
-
-        const workBg = VANTA.FOG({
-            el: "#vanta-bg-work",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            highlightColor: 0x98fb98,
-            midtoneColor: 0x3cb371,
-            lowlightColor: 0x2e8b57,
-            baseColor: 0xfffde7,
-            blurFactor: 0.6,
-            speed: 1.5,
-            zoom: 0.8
-        });
-        workBg.pause();
-
-        const sections = document.querySelectorAll('section');
-        const backgroundMap = {
-            'home': { bg: homeBg, el: document.getElementById('vanta-bg-home') },
-            'about': { bg: aboutBg, el: document.getElementById('vanta-bg-about') },
-            'work': { bg: workBg, el: document.getElementById('vanta-bg-work') }
+        const vantaConfigs = {
+            home: {
+                el: "#vanta-bg-home",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                highlightColor: 0xadd8e6,
+                midtoneColor: 0x87ceeb,
+                lowlightColor: 0x4682b4,
+                baseColor: 0xfffde7,
+                blurFactor: 0.6,
+                speed: 1.5,
+                zoom: 0.8
+            },
+            about: {
+                el: "#vanta-bg-about",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                highlightColor: 0xffb6c1,
+                midtoneColor: 0xff69b4,
+                lowlightColor: 0xc71585,
+                baseColor: 0xfffde7,
+                blurFactor: 0.6,
+                speed: 1.5,
+                zoom: 0.8
+            },
+            work: {
+                el: "#vanta-bg-work",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                highlightColor: 0x98fb98,
+                midtoneColor: 0x3cb371,
+                lowlightColor: 0x2e8b57,
+                baseColor: 0xfffde7,
+                blurFactor: 0.6,
+                speed: 1.5,
+                zoom: 0.8
+            }
         };
 
+        const backgroundMap = {
+            'home': { el: document.getElementById('vanta-bg-home'), effect: null },
+            'about': { el: document.getElementById('vanta-bg-about'), effect: null },
+            'work': { el: document.getElementById('vanta-bg-work'), effect: null }
+        };
+
+        // Initialize home background
+        backgroundMap.home.effect = VANTA.FOG(vantaConfigs.home);
+
+        const sections = document.querySelectorAll('section');
         let activeSection = 'home';
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const newActiveSection = entry.target.id;
-                    if (newActiveSection !== activeSection) {
-                        const oldBgEl = backgroundMap[activeSection].el;
-                        const newBgEl = backgroundMap[newActiveSection].el;
+                    if (newActiveSection !== activeSection && backgroundMap[newActiveSection]) {
+                        const oldBgData = backgroundMap[activeSection];
+                        const newBgData = backgroundMap[newActiveSection];
 
-                        if (oldBgEl && newBgEl) {
-                            oldBgEl.classList.add('hidden-left');
-                            newBgEl.classList.remove('hidden-left', 'hidden-right');
+                        if (oldBgData && oldBgData.el && newBgData && newBgData.el) {
+                            oldBgData.el.classList.add('hidden-left');
+                            newBgData.el.classList.remove('hidden-left', 'hidden-right');
+                            oldBgData.el.classList.add('hidden');
+                            newBgData.el.classList.remove('hidden');
                         }
                         
-                        backgroundMap[newActiveSection].bg.play();
-                        if (activeSection && backgroundMap[activeSection] && activeSection !== newActiveSection) {
-                            backgroundMap[activeSection].bg.pause();
+                        if (newBgData.effect === null) {
+                            newBgData.effect = VANTA.FOG(vantaConfigs[newActiveSection]);
+                        }
+
+                        if (oldBgData && oldBgData.effect) {
+                            oldBgData.effect.destroy();
+                            oldBgData.effect = null;
                         }
 
                         activeSection = newActiveSection;
@@ -230,7 +247,19 @@
         }, { threshold: 0.5 });
 
         sections.forEach(section => {
-            observer.observe(section);
+            if (section.id in backgroundMap) {
+                observer.observe(section);
+            }
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('header nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>
