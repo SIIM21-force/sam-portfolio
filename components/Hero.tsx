@@ -47,7 +47,7 @@ const Hero: React.FC = () => {
             {/* Main Image Container */}
             <div className="w-full h-full rounded-full border-4 border-brand-cream dark:border-brand-dark shadow-2xl overflow-hidden relative z-10 ring-4 ring-black/5 dark:ring-white/10">
               <img 
-                src="/images/WhatsApp Image 2024-09-25 at 14.14.39_dae8b487.jpg" 
+                src="public/images/WhatsApp Image 2024-09-25 at 14.14.39_dae8b487.jpg" 
                 alt="Samarth M Katageri" 
                 className="w-full h-full object-cover"
               />
